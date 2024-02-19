@@ -3,7 +3,7 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 
-record Employee(String firstName, String lastName, int hireDate) {};
+record Employee(String firstName, String lastName, int hireDate) {}
 
 public class Main {
   public static void main(String[] args) {
@@ -14,11 +14,10 @@ public class Main {
     employeeList.add(new Employee("Catherine", "Nekesa", 2023));
     employeeList.add(new Employee("Patrick", "Mahomes", 2017));
 
-    sortList(employeeList);
-
+    sortList(employeeList, "yearsWorked");
   }
 
-  public static void sortList(List<Employee> list) {
+  public static void sortList(List<Employee> list, String sortType) {
     class DetailedEmployee {
       private String fullName;
       private int yearsWorked;
@@ -50,6 +49,9 @@ public class Main {
     var comparator = new Comparator<DetailedEmployee>() {
       @Override
       public int compare(DetailedEmployee e1, DetailedEmployee e2) {
+        if (sortType.equalsIgnoreCase("yearsWorked")) {
+          return e1.yearsWorked - e2.yearsWorked;
+        }
         return e1.fullName.compareTo(e2.fullName);
       }
     };
@@ -58,7 +60,11 @@ public class Main {
       employees.add(new DetailedEmployee(employee));
     }
 
-    employees.sort(comparator);
+    if (sortType.equalsIgnoreCase("yearsWorked")) {
+      employees.sort(comparator.reversed());
+    } else {
+      employees.sort(comparator);
+    }
 
     for (var employee : employees) {
       System.out.println(employee);
